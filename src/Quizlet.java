@@ -1,19 +1,93 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
 
 /**
- *
- * @author z004r8tr
+ * @author Akshat
  */
 public class Quizlet extends javax.swing.JFrame {
 
+    ButtonGroup options;
+    HashMap<Integer, String> listOfQuestions;
+    HashMap<Integer, ArrayList<String>> listOfOptions;
+    HashMap<Integer, String> listOfAnswer;
+    int displayIndex = -1;
+    int score = 0;
+    
+    /*
+     *  This method adds questions, options and answers to the respective map.
+     */
+    private void addQuestionsAnswers(){
+        ArrayList<String> optionsToAdd = new ArrayList<>(4);
+        optionsToAdd.add("Nitrogen");
+        optionsToAdd.add("Oxygen");
+        optionsToAdd.add("Hydrogen");
+        optionsToAdd.add("Carbon Dioxide");
+        listOfQuestions.put(0, "Which gas is the most abundant in nature?");
+        listOfOptions.put(0, optionsToAdd);
+        listOfAnswer.put(0, "Nitrogen");
+    }
+    
+    /*
+     * This method displays the questions and options on the UI.
+     */
+    private void displayQuestionAnswers(){
+        if(listOfQuestions.size() - 1 >= displayIndex + 1){
+            displayIndex += 1;
+            questionLabel.setText(listOfQuestions.get(displayIndex));
+            optACb.setText(listOfOptions.get(displayIndex).get(0));
+            optBCb.setText(listOfOptions.get(displayIndex).get(1));
+            optCCb.setText(listOfOptions.get(displayIndex).get(2));
+            optDCb.setText(listOfOptions.get(displayIndex).get(3));
+        }
+        else{
+            System.out.println("Questions ended.");
+            System.out.println("Score: " + score);
+            submitBtn.setEnabled(false);
+        }
+    }
+    
+    /**
+     * This function checks if the selected option and is correct.
+     * For correct answer, it increments the score.
+     */
+    private void checkAnswer(){
+        String selectedOption = "";
+        for (Enumeration<AbstractButton> buttons = options.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+
+            if (button.isSelected()) {
+                selectedOption = button.getText();
+            }
+        }
+
+        if(selectedOption.isBlank()){
+            // Do nothing
+        }
+        else if(selectedOption.equals(listOfAnswer.get(displayIndex))){
+            score += 1;
+        }
+    }
+    
     /**
      * Creates new form Quizlet
      */
     public Quizlet() {
         initComponents();
+        
+        options = new ButtonGroup();
+        options.add(optACb);
+        options.add(optBCb);
+        options.add(optCCb);
+        options.add(optDCb);
+        
+        listOfQuestions = new HashMap<>();
+        listOfOptions = new HashMap<>();
+        listOfAnswer = new HashMap<>();
+        addQuestionsAnswers();
+        displayQuestionAnswers();
     }
 
     /**
@@ -25,21 +99,79 @@ public class Quizlet extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        headingLabel = new javax.swing.JLabel();
+        questionLabel = new javax.swing.JLabel();
+        optACb = new javax.swing.JRadioButton();
+        optBCb = new javax.swing.JRadioButton();
+        optCCb = new javax.swing.JRadioButton();
+        optDCb = new javax.swing.JRadioButton();
+        submitBtn = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        headingLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        headingLabel.setText("Akshat's Quizlet");
+
+        submitBtn.setText("Submit");
+        submitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(headingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(questionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)))
+                .addGap(85, 85, 85))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(optDCb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(optCCb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(optBCb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(optACb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(243, 243, 243))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(submitBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(headingLabel)
+                .addGap(27, 27, 27)
+                .addComponent(questionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(optACb, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(optBCb, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(optCCb, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(optDCb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(26, 26, 26)
+                .addComponent(submitBtn)
+                .addGap(37, 37, 37))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
+        checkAnswer();
+        displayQuestionAnswers();
+    }//GEN-LAST:event_submitBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -77,5 +209,12 @@ public class Quizlet extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel headingLabel;
+    private javax.swing.JRadioButton optACb;
+    private javax.swing.JRadioButton optBCb;
+    private javax.swing.JRadioButton optCCb;
+    private javax.swing.JRadioButton optDCb;
+    private javax.swing.JLabel questionLabel;
+    private javax.swing.JButton submitBtn;
     // End of variables declaration//GEN-END:variables
 }
